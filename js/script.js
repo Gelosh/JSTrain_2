@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', function() {
     let tab = document.querySelectorAll('.info-header-tab'),
         info = document.querySelector('.info-header'),
         tabContent = document.querySelectorAll('.info-tabcontent');
-        
+                
     function hideTabContent(a) {
         for (let i = a; i < tabContent.length; i++) {
             tabContent[i].classList.remove('show');
@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     //Timer
-    let deadline = '2023-01-20';
+    let deadline = '2023-01-21';
 
     function getTimeRemainig (endtime) {
         let t = Date.parse(endtime)-Date.parse(new Date()),
@@ -89,15 +89,23 @@ window.addEventListener('DOMContentLoaded', function() {
         overlay = document.querySelector('.overlay'),
         close = document.querySelector('.popup-close');
 
-    more.addEventListener('click', function() {
-        overlay.style.display = 'block';
-        this.classList.add('more-splash');
-        document.body.style.overflow = 'hidden';
-    });
+    function modalWindow(open, close) {
+        open.addEventListener('click', function() {
+            overlay.style.display = 'block';
+            this.classList.add('more-splash');
+            document.body.style.overflow = 'hidden';
+        });
+        close.addEventListener('click', function() {
+            overlay.style.display = 'none';
+            more.classList.remove('more=splash');
+            document.body.style.overflow = '';
+        });
+    }
 
-    close.addEventListener('click', function() {
-        overlay.style.display = 'none';
-        more.classList.remove('more=splash');
-        document.body.style.overflow = '';
-    });
+    modalWindow(more, close);
+
+    let morebtn = document.querySelectorAll('.description-btn');
+    for (let i = 0; i < morebtn.length; i++) {
+        modalWindow(morebtn[i], close);
+    }
 });
