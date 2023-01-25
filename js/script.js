@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     //Timer
-    let deadline = '2023-01-21';
+    let deadline = '2023-01-27';
 
     function getTimeRemainig (endtime) {
         let t = Date.parse(endtime)-Date.parse(new Date()),
@@ -127,4 +127,49 @@ window.addEventListener('DOMContentLoaded', function() {
 
     const item = new Options(300,350, "red", 14, "center");
     item.divAdd();
+
+    //Form
+
+    let message = {
+        laoding: 'Loading...',
+        succees: 'Thank you we call you Soon!',
+        failure: 'Error, some thing wrong'
+    };
+
+    let form = document.querySelector('.main-form'),
+        input = form.getElementsByTagName('input'),
+        statusMessage = document.createElement('div');
+
+        statusMessage.classList.add('status');
+        form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+        let formData = new FormData(form);
+        let obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
+
+        request.send(json);
+
+        request.addEventListener('readystatechange', function() {
+            if (request.readyState < 4) {
+                statusMessage.innerHTML = message.laoding;
+            } else if (request.readyState == 4 && request.status == 200) {
+                statusMessage.innerHTML = message.succees;
+            } else {
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+
+        for (let i = 0; i < input.length; i++) {
+            input[i].value = '';
+        }
+    });
 });
